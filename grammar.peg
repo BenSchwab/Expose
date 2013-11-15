@@ -1,0 +1,59 @@
+{
+nouns = ["beers", "drinkers", "bars"]; 
+verbs = ["named", "liked", "likes", "served", "serves", "sold", "sells"];
+
+function validate(wordlist, parsedChars) {
+  token = parsedChars.join("").toLowerCase();
+  return wordlist.indexOf(token) != -1 ? token : null;
+}
+
+validateNoun = validate.bind(this, nouns);
+validateVerb = validate.bind(this, verbs);
+}
+
+start
+  = command
+
+command
+  = 'find'i sp query:query { return query; }
+
+query
+  = from where
+  / from
+
+from
+  = noun:[a-zA-Z]+ sp { return [validateNoun(noun)]; }
+
+where
+  = 'that'i sp object:[a-zA-Z]+ sp verb:[a-zA-Z]+ sp extra:where_cont* 
+    { 
+      return [validateVerb(verb), object.join("")].concat(extra); 
+    }
+  / attribute:[a-zA-Z]+ sp oper:oper sp digits:[0-9]+ sp extra:where_cont*
+    {
+      return [attribute.join(""), oper, parseInt(digits.join(""), 10)].concat(extra);
+    }
+  / verb:[a-zA-Z]+ sp prep* sp object:[a-zA-Z]+ sp extra:where_cont* 
+    { 
+      return [validateVerb(verb), object.join("")].concat(extra); 
+    }
+
+where_cont
+  = 'and'i sp where:where { return where; }
+
+oper
+  = '<'
+  / '>'
+  / '<='
+  / '>='
+  / '='
+  / '=='
+
+
+prep
+  = "by"
+  / "from"
+  / "in"
+
+sp
+  = [ ]* { return [] }
