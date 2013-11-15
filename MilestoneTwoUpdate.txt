@@ -10,6 +10,34 @@ final version.
 
 We also have a separate, and more complete grammar and parser that we will intergrate into the UI.
 
+The parser is imported as the "parser" javascript module by the browser. You can test the parser by, for instance, typing the following commands in the browser console:
+
+parser.parse('find beers that Mary likes');
+parser.parse('find beers liked by John and liked by Mary and that Satisfaction serves');
+
+Both results will return a JSON object that decomposes the phrase into the noun to be searched (SELECT) and the conditional (WHERE) clauses. For longer sentences, such as the second example, the result for the conditional clauses will be nested nodes of "verb" and "subject". As a more concrete example, the second sentence returns:
+
+[
+   {
+      "noun": "beers"
+   },
+   {
+      "verb": "liked",
+      "subject": "John",
+      "next": {
+         "verb": "liked",
+         "subject": "Mary",
+         "next": {
+            "verb": "serves",
+            "subject": "Satisfaction",
+            "next": undefined
+         }
+      }
+   }
+]
+
 Work to be done:
 We still need to specify the endpoint we will call in order to execute the sql queries we are generating. We also need to be
 able to display the results of the queries in real time in the front end.
+
+We need better feedback from the database in order to make parsing more intelligent. Determining whether a noun is a subject or object in the sentence is very tricky without real NLP, so we are planning to determine that with the help of data from the database/metadata that is written specifically for this application. Right now, sentences like "find drinkers that like Heineken" don't parse correctly, so there's improvement to be done there.
