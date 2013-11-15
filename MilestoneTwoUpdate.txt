@@ -1,0 +1,15 @@
+Milestone Two:
+
+We have created the basic front end logic for expose. This includes recording what the user types, and creating javascript objects
+which represent the E/R graph that we base or translation from.
+
+You can test the current version by openining index.html in a folder with all the other files we submitted in Chrome. This version
+uses a partial parser which can understand select from where claues with only one where filter. It also naively naturally joins
+tables as it encounters them. A lot of work is left, but we believe this framework will be able to be extended for our more complete
+final version.
+
+We also have a separate, and more complete grammar and parser that we will intergrate into the UI.
+
+Work to be done:
+We still need to specify the endpoint we will call in order to execute the sql queries we are generating. We also need to be
+able to display the results of the queries in real time in the front end.
