@@ -9,4 +9,5 @@
 - Use beers db as sample
 
 #### Tasks to complete:
+- Feedback from database into parser to disambiguate sentences
 
