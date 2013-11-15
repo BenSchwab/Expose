@@ -9,29 +9,32 @@
 <body>
 
    <article class = "expose_search_control">
-      <p>Powered by</p>
+      <div class = "expose_logo_div">
       <p class = "expose_logo">Expose.js</p>
+    </div>
      <input type="text" class="expose_search_bar">
+     <img class="red_x" src="imgs/red_x.png"/>
+     <img class = "green_check" src="imgs/green_check.png"/>
      <div  class="expose_search_list" >
         <table class="expose_search_table" >
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-              <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-              <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-              <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
-            <tr class="expose_search_option"> <td> Option 1</td></tr>
+
         </table>
       </div>
   </article>
+  <br>
+  <br>
+  <div class="query_div">
+    <p>Version notes: You must type your queries exactly the first time. Backspace logic has not be implemented or tested. If you see no queries your serach is invalid. Refresh the page and try again.  Searches can continue indefinitely, but will eventually become non-sensical.  For more details
+      see MilestoneTwoUpdate.txt in the project directory.</p>
+      <br>
+    <br>
+
+    <p>The parsed SQL Query:</p>
+    <p class="sql_query_display">Select</p>
+  </div>
 
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="test.js"></script>
+  <script src="expose.js"></script>
   <script src="flashy.js"></script>
   <script src="parser.js"></script>
 </body>
