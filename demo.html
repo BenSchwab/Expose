@@ -10,7 +10,9 @@
     // Connect to the HTML element we 'print' to
     function print(text) {
       var element = document.getElementById('output');
+      event.preventDefault();
       element.innerHTML = text.replace(/\n/g, '<br>');
+
     }
 
     // Open a database
