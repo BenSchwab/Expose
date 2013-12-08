@@ -14,7 +14,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
-  return render_template('./demo.html')
+  return render_template('demo.html')
 
 @app.route('/query_row/<query>')
 def query_row(query):
