@@ -21,6 +21,8 @@
     // Run a command in the database
     function execute(commands) {
       try {
+
+        console.log(commands.replace(/\n/g, '; '));
         var data = db.exec(commands.replace(/\n/g, '; '));
         print(JSON.stringify(data, null, '  '));
 

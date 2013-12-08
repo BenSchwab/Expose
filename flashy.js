@@ -14,6 +14,10 @@ function(){
       },function(){
       $(this).css( "opacity", 0.5);
    });
+
+   $(document).ready(function(){
+    $('#cool_table').dataTable();
+});
 }
 
 
