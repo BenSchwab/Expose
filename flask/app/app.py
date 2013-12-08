@@ -25,7 +25,7 @@ def query_row(query):
   # nitems = request.args.get('nitems', 2)
   # # query database
   # cursor = g.db.execute('select * from items limit ?', (nitems,))
-  
+
   # return json
   columns = [column[0] for column in cursor.description]
   results = []
@@ -33,7 +33,7 @@ def query_row(query):
   for i, row in enumerate(rows,start=0):
     # rList = []
     myDict = ( dict( (col,row[j]) for j, col in enumerate(columns,start=0)))
-      
+
     results.append((i,myDict))
   print(dict(results))
   return jsonify(dict(results))
@@ -69,10 +69,10 @@ def query_row_post():
     for i, row in enumerate(rows,start=0):
       # rList = []
       myDict = ( dict( (col,row[j]) for j, col in enumerate(columns,start=0)))
-        
+
       results.append((i,myDict))
     print(dict(results))
-    
+
     return jsonify(dict(results))
   else:
     return "error"

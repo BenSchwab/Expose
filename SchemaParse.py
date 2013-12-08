@@ -38,7 +38,7 @@ def parseDatabase():
                l = 1
                ind = 0
             fColumn = q[l].split(" ")[ind]
-            print(fColumn +" references")
+            #print(fColumn +" references")
             fromColumn = fromTable.getColumn(fColumn)
             p = ref[1].split("(")
             table = p[0].strip()
@@ -86,11 +86,13 @@ class Table:
    name = ""
    mapsTo = []
    expose = True
+   wordType = "noun"
    def __init__(self, tableName):
         self.name = tableName
         self.mapsTo = []
         self.columns = []
         self.expose = True;
+        self.wordType = "noun"
    def getReferences(self):
       return
    def getColumn(self, columnName):
