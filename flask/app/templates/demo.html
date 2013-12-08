@@ -3,10 +3,10 @@
   <title>
     Expose.js
   </title>
-  <script src="./sql.js"></script>
-  <script src="./jquery-1.10.2.min.js"></script>
-  <script src="./json2sql.js"></script>
-  <script src="./querytables.js"></script>
+
+
+  <script src="{{ url_for('static', filename='js/jquery-1.10.2.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/expose_base.js') }}"></script>
 
 
   <script>
@@ -21,6 +21,11 @@
 
   <div class="result">
   </div>
+
+  <table id="table_result">
+    <tbody>
+    </tobdy>
+  </table>
 
 </body>
 </html>
