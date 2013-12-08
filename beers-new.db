@@ -1,0 +1,35 @@
+SQLite format 3@  -â)ûûKL¹1)
+=indexsqlite_autoindex_Likes_1LikesetableFrequentsFrequentsCREATE TABLE Frequents(drinker VARCHAR(20) NOT NULL REFERENCES Drinker(name), bar VARCHAR(20) NOT NULL REFERENCES Bar(name), times_a_week SMALLINT CHECK(times_a_week > 0), PRIMARY KEY(drinker, bar))1Eindexsqlite_autoindex_Frequents_1Frequents	k-tableDrinkerDrinkerCREATE TABLE Drinker(name VARCHAR(20) NOT NULL PRIMARY KEY, address VARCHAR(20))-Aindexsqlite_autoindex_Drinker_1Drinkera%tableBeerBeerCREATE TABLE Beer(name VARCHAR(20) NOT NULL PRIMARY KEY, brewer VARCHAR(20))';indexsqlite_autoindex_Beer_1Beer_%tableBarBarCREATE TABLE Bar(name VARCHAR(20) NOT NULL PRIMARY KEY, address VARCHAR(20))%9indexsqlite_autoindex_Bar_1Bar
+MÛ½tM%-1Talk of the Town108 E. Main Street!%1Satisfaction905 W. Main Street$+1James Joyce Pub912 W. Main Street/The Edge108 Morris Street#)1Down Under Pub802 W. Main Street
+§îÍ¼§á-Talk of the Town%Satisfaction+James Joyce PubThe Edge)	Down Under Pub
+ZçÆ¯yZ/Full SailFull Sail Brewing1ErdingerErdinger Weissbrau'DixieDixie Brewing%CoronaGrupo Modelo3BudweiserAnheuser-Busch Inc.)AmstelAmstel Brewery
+¸öèÝÓÆ¸
+Full SailErdinger	Dixie
+Corona
+Budweiser		Amstel
+~æÌ²~1Eve100 W. Main Street1Dan300 N. Duke Street1Coy200 S. Duke Street1Ben101 W. Main Street1Amy100 W. Main Street
+ÙùñéáÙEveDanCoyBen	Amy
+îçÏ¹ x`O7!î+EveJames Joyce Pub-DanTalk of the Town
+%DanSatisfaction	+	DanJames Joyce Pub	DanThe Edge)DanDown Under Pub	CoyThe Edge)	CoyDown Under Pub-	BenTalk of the Town%BenSatisfaction+	BenJames Joyce Pub+AmyJames Joyce Pub
+õéÑ¼£{d;&
+Sõ+EveJames Joyce Pub-DanTalk of the Town%DanSatisfaction
++DanJames Joyce Pub	DanThe Edge)DanDown Under PubCoyThe Edge)CoyDown Under Pub-BenTalk of the Town%BenSatisfaction+BenJames Joyce Pub+	AmyJames Joyce Pub
+RòäÖÅ¸ª~n`REveCoronaEveAmstel
+DanErdinger	DanDixieDanCoronaDanBudweiserDanAmstelCoyDixieBenBudweiserBenAmstelAmyCoronaAmyAmstel
+GòãÔÂ´¥veVGEveCoronaEveAmstelDanErdinger
+
+DanDixie	DanCoronaDanBudweiserDanAmstel
+CoyDixieBenBudweiserBenAmstelAmyCorona
+	AmyAmstel
+hhÉðS|éò%Õ))+?indexsqlite_autoindex_Serves_1Serves_%tableBarBarCREATE TABLE Bar(name VARCHAR(20) NOT NULL PRIMARY KEY, address VARCHAR(20))%9indexsqlite_autoindex_Bar_1Bara%tableBeerBeerCREATE TABLE Beer(name VARCHAR(20) NOT NULL PRIMARY KEY, brewer VARCHAR(20))';indexsqlite_autoindex_Beer__%tableBarBarCREATE TABLE Bar(name VARCHAR(20) NOT NULL PRIMARY KEY, address VARCHAR(20))%9indexsqlite_autoindex_Bar_1Bara%tableBeerBeerCREATE TABLE Beer(name VARCHAR(20) NOT NULL PRIMARY KEY, brewer VARCHAR(20))';indexsqlite_autoindex_Beer_1Beerk-tableDrinkerDrinkerCREATE TABLE Drinker(name VARCHAR(20) NOT NULL PRIMARY KEY, address VARCHAR(20))-Aindexsqlite_autoindex_Drinker_1DrinkeretableFrequentsFrequentsCREATE TABLE Frequents(drinker VARCHAR(20) NOT NULL REFERENCES Drinker(name), bar VARCHAR(20) NOT NULL REFERENCES Bar(name), times_a_week SMALLINT CHECK(times_a_week > 0), PRIMARY KEY(drinker, bar))
+ßÞ¹cN2ôÏ¯lM*ß%-Talk of the TownBudweiser@"-Talk of the TownAmstel@!%SatisfactionFull Sail@%SatisfactionDixie@
+%SatisfactionCorona@!%SatisfactionBudweiser@%SatisfactionAmstel@#
++James Joyce PubErdinger@	+James Joyce PubDixie!+James Joyce PubCorona@
++James Joyce PubAmstelThe EdgeCoronaThe EdgeBudweiser@The EdgeAmstel@)Down Under PubCorona#)Down Under PubBudweiser@ )Down Under PubAmstel@
+LçÊ°V;!ìÑ¹¢kLq-Talk of the TownBudweiser-Talk of the TownAmstel%SatisfactionFull Sail%SatisfactionDixie%SatisfactionCorona
+%SatisfactionBudweiser%SatisfactionAmstel+James Joyce PubErdinger
++James Joyce PubDixie	+James Joyce PubCorona+James Joyce PubAmstelThe EdgeCoronaThe EdgeBudweiserThe EdgeAmstel)Down Under PubCorona)Down Under PubBudweiser)	Down Under PubAmstel
+ùù,ÜÓ1Eindexsqlite_autoindex_Frequents_1Frequents	-	9tableLikesLikes
+CREATE TABLE Likes(drinker VARCHAR(20) NOT NULL REFERENCES Drinker(name), beer VARCHAR(20) NOT NULL REFERENCES Beer(name), PRIMARY KEY(drinker, beer)))
+=indexsqlite_autoindex_Likes_1LikesImtableServesServes
+CREATE TABLE Serves(bar VARCHAR(20) NOT NULL REFERENCES Bar(name), beer VARCHAR(20) NOT NULL REFERENCES Beer(name), price DECIMAL(5,2) CHECK(price > 0), PRIMARY KEY(bar, beer))+?indexsqlite_autoindex_Serves_1Serves
