@@ -1,5 +1,6 @@
 import sqlite3
 import json
+import en
 
 
 #TODO: read a database - parse out the structure return a config.json file
@@ -89,10 +90,18 @@ class Table:
    wordType = "noun"
    def __init__(self, tableName):
         self.name = tableName
-        self.mapsTo = []
+        tableName = tableName.lower()
+
+        if(en.is_noun(tableName)):
+          self.wordType = "noun"
+          self.mapsTo = [en.noun.plural(tableName), en.noun.singular(tableName)]
+        else:
+          self.wordType = "verb"
+          self.mapsTo = [en.verb.infinitive(tableName), en.verb.present(tableName, person=3, negate=False), en.verb.past(tableName), en.verb.present_participle(tableName)]
+        
         self.columns = []
         self.expose = True;
-        self.wordType = "noun"
+        
    def getReferences(self):
       return
    def getColumn(self, columnName):
@@ -104,3 +113,6 @@ class Table:
 class References:
    def f(self):
       return 'hello world'
+
+if __name__ == '__main__':
+  parseDatabase()
