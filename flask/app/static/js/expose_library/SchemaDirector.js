@@ -1,120 +1,8 @@
-//jsonString = '{"tables": [{"mapsTo": [], "expose": true, "name": "Bar", "columns": [{"mapsTo": "", "expose": true, "references": "", "name": "name"}, {"mapsTo": "", "expose": true, "references": "", "name": "address"}]}, {"mapsTo": [], "expose": true, "name": "Beer", "columns": [{"mapsTo": "", "expose": true, "references": "", "name": "name"}, {"mapsTo": "", "expose": true, "references": "", "name": "brewer"}]}, {"mapsTo": [], "expose": true, "name": "Drinker", "columns": [{"mapsTo": "", "expose": true, "references": "", "name": "name"}, {"mapsTo": "", "expose": true, "references": "", "name": "address"}]}, {"mapsTo": [], "expose": true, "name": "Frequents", "columns": [{"mapsTo": "", "expose": true, "references": "Drinker.name", "name": "drinker"}, {"mapsTo": "", "expose": true, "references": "Bar.name", "name": "bar"}, {"mapsTo": "", "expose": true, "references": "", "name": "times_a_week"}]}, {"mapsTo": [], "expose": true, "name": "Likes", "columns": [{"mapsTo": "", "expose": true, "references": "Drinker.name", "name": "drinker"}, {"mapsTo": "", "expose": true, "references": "Beer.name", "name": "beer"}]}, {"mapsTo": [], "expose": true, "name": "Serves", "columns": [{"mapsTo": "", "expose": true, "references": "Bar.name", "name": "bar"}, {"mapsTo": "", "expose": true, "references": "Beer.name", "name": "beer"}, {"mapsTo": "", "expose": true, "references": "", "name": "price"}]}]}';
 
-var jsonString = '{"tables":[{"mapsTo":["Bar","Pub","Bars","Pubs"],"wordType":"noun","expose":true,"name":"Bar","columns":[{"mapsTo":["Bar","Pub","Bars","Pubs"],"expose":true,"references":"","name":"name"},{"mapsTo":[],"expose":true,"references":"","name":"address"}]},{"mapsTo":["Beer","Beers","Brews","Brew"],"wordType":"noun","expose":true,"name":"Beer","columns":[{"mapsTo":[],"expose":true,"references":"","name":"name"},{"mapsTo":[],"expose":true,"references":"","name":"brewer"}]},{"mapsTo":["Drinker","Drinkers","Person","People"],"wordType":"noun","expose":true,"name":"Drinker","columns":[{"mapsTo":[],"expose":true,"references":"","name":"name"},{"mapsTo":[],"expose":true,"references":"","name":"address"}]},{"mapsTo":["Frequents","Frequented","Frequenter"],"wordType":"verb","expose":true,"name":"Frequents","columns":[{"mapsTo":[],"expose":true,"references":"Drinker.name","name":"drinker"},{"mapsTo":[],"expose":true,"references":"Bar.name","name":"bar"},{"mapsTo":[],"expose":true,"references":"","name":"times_a_week"}]},{"mapsTo":["Likes","Like","Liked"],"wordType":"verb","expose":true,"name":"Likes","columns":[{"mapsTo":[],"expose":true,"references":"Drinker.name","name":"drinker"},{"mapsTo":[],"expose":true,"references":"Beer.name","name":"beer"}]},{"mapsTo":["Serves","Serve","Served"],"wordType":"verb","expose":true,"name":"Serves","columns":[{"mapsTo":[],"expose":true,"references":"Bar.name","name":"bar"},{"mapsTo":[],"expose":true,"references":"Beer.name","name":"beer"},{"mapsTo":[],"expose":true,"references":"","name":"price"}]}]}';
+var myDatabaseConfig;
+$.getJSON('../static/js/config.json', function(data){myDatabaseConfig = data;});
 
 
-//replace above with
-var myDatabaseConfig = eval('(' + jsonString+ ')');
-
-var simpleParseTree = {
-      "select": "beers",
-      "filters": [
-         {
-            "type": "attribute",
-            "attribute": "name",
-            "operation": "=",
-            "argument": "Corona"
-         }
-      ]
-   };
-
-var toughParseTree = {
-      "select": "beers",
-      "filters": [
-         {
-            "type": "relation",
-            "relation": "liked",
-            "target": {
-               "select": "drinkers",
-               "filters": [
-                  {
-                     "type": "attribute",
-                     "attribute": "name",
-                     "operation": "=",
-                     "argument": "Ben"
-                  }
-               ]
-            }
-         },
-         {
-            "type": "relation",
-            "relation": "served",
-            "target": {
-               "select": "bars",
-               "filters": [
-                  {
-                     "type": "attribute",
-                     "attribute": "name",
-                     "operation": "=",
-                     "argument": "Satisfaction"
-                  }
-               ]
-            }
-         }
-      ]
-   };
-
-var newParseTree = {
-      "select": "beers",
-      "filters": [
-         {
-            "type": "relation",
-            "relation": "liked",
-            "target": {
-               "select": "drinkers",
-               "filters": [
-                  {
-                     "type": "attribute",
-                     "attribute": "name",
-                     "operation": "=",
-                     "argument": "Ben"
-                  },
-                  {
-                     "type": "attribute",
-                     "attribute": "name",
-                     "operation": "!=",
-                     "argument": "Dan"
-                  }
-               ]
-            }
-         }
-      ]
-   };
-
-var sampleParseTree =  {
-         "select": "drinker",
-         "relation": "likes",
-         "target": {
-            "select": "beer",
-            "relation": "serves",
-            "target": {
-                "select": "bars",
-               "attribute": "name",
-               "operation": "=",
-               "argument": "Satisfaction"
-            }
-         }
-      };
-var basicParseTree =  {
-               "select": "bars",
-               "attribute": "name",
-               "operation": "=",
-               "argument": "Satisfaction"
-            };
-var oneNestParseTree =  {
-
-            "select": "beer",
-            "relation": "serves",
-            "target": {
-                "select": "bars",
-               "attribute": "name",
-               "operation": "=",
-               "argument": "Satisfaction"
-            }
-
-      };
-
-//
 var recursionCounter = 0;
 function getTableCast(recursionCounter){
     return String.fromCharCode(97 + recursionCounter);
@@ -122,7 +10,7 @@ function getTableCast(recursionCounter){
 
 var SQLBuilder = {
 
-    buildSQLStatement: function(parseTree){
+    buildSQLStatement: function(parseTree, firstParse){
         if (parseTree instanceof Array) {
             parseTree = parseTree[0];
         }
@@ -149,7 +37,12 @@ var SQLBuilder = {
             return null; //we failed!
         }
         var tableProjection = StateKeeper.getTableProjection(fromTable);
-        selectClause += tableProjection +" ";
+        if(firstParse){
+            selectClause += tableProjection +" ";
+        }
+        else{
+            selectClause += " * ";
+        }
         fromClause += fromTable.name+ " ";
         var filterCount = 0;
 
@@ -158,7 +51,7 @@ var SQLBuilder = {
             var filter = filters[f];
             if(filter.type === 'attribute'){
                  var argument = filter.argument;
-                 if(typeof argument ==="string"){
+                 if(!isNumber(argument)){
                     argument = "'"+argument+"'";
                 }
                 var attribute = filter.attribute;
@@ -194,7 +87,7 @@ var SQLBuilder = {
                 var joinFromConstraints = StateKeeper.getContrainsts(joinTable,fromTable);
                 var toJoinConstraints = StateKeeper.getContrainsts(toTable,joinTable);
                 var joinToConstraints = StateKeeper.getContrainsts(joinTable,toTable);
-                var subQuery = SQLBuilder.buildSQLStatement(subTree);
+                var subQuery = SQLBuilder.buildSQLStatement(subTree, false);
                 if(subQuery ===null){
                     console.log("invalid parse tree");
                     return null;
@@ -263,116 +156,6 @@ var SQLBuilder = {
 };
 
 
-
-
-// var SQLBuilder = {
-
-//     buildSQLStatement: function(parseTree){
-//         console.log(parseTree.select);
-//         var from = parseTree.select;
-//         var argument = parseTree.argument;
-//         var attribute = parseTree.attribute;
-//         var operation = parseTree.operation;
-//         var relation = parseTree.relation;
-//         var fromTable = StateKeeper.getTable(from);
-//         console.log(fromTable);
-//         if(fromTable===null){
-//             console.log("SQL build failed. " + from +" is not a valid table or mapped table");
-//             return null; //we failed!
-//         }
-//         console.log("Atr:"+attribute);
-//         console.log(typeof attribute!=='undefined');
-//         //base case
-//         if(typeof attribute!=='undefined'){
-//             console.log("in base case!");
-//             var tableProjection = StateKeeper.getTableProjection(fromTable);
-//             if(typeof argument ==="string"){
-//                 argument = "'"+argument+"'";
-//             }
-//             return "SELECT DISTINCT " + tableProjection +" FROM " + fromTable.name + " WHERE " + attribute +" "+operation +" "+argument;
-//         }
-//         //non base case
-//         else{
-//             console.log("in standard case!");
-//             var subTree = parseTree.target;
-//             var to = subTree.select;
-//             var join = relation;
-//             var joinTable =  StateKeeper.getTable(relation);
-//             var toTable = StateKeeper.getTable(to);
-//             if(to === null){
-//                 console.log("SQL build failed. " + to +" is not a valid table or mapped table");
-//                 return null;
-//             }
-//             //TODO: optional breaks non edited config
-//             if(!StateKeeper.validNounVerbTransition(from, join)){
-//                 console.log("SQL build failed. " + from +" joined with " + join +" is not a valid noun-verb pair.");
-//                 return null;
-//             }
-//             if(!StateKeeper.validNounVerbTransition(to, join)){
-//                 console.log("SQL build failed. " + to +" joined with " + join +" is not a valid noun-verb pair.");
-//                 return null;
-//             }
-//             var fromJoinConstraints = StateKeeper.getContrainsts(fromTable,joinTable);
-//             var joinFromConstraints = StateKeeper.getContrainsts(joinTable,fromTable);
-//             var toJoinConstraints = StateKeeper.getContrainsts(toTable,joinTable);
-//             var joinToConstraints = StateKeeper.getContrainsts(joinTable,toTable);
-//             var subQuery = SQLBuilder.buildSQLStatement(subTree);
-//             if(subQuery ===null){
-//                 console.log("invalid parse tree");
-//                 return null;
-//             }
-//             var asCast = getTableCast(recursionCounter);
-//             recursionCounter++;
-//             var tSubQuery = "( "+subQuery+" )" + " AS " + asCast;
-//             var where = "";
-//             console.log(fromJoinConstraints);
-//             for(var i = 0; i<fromJoinConstraints.length; i++){
-//                 var constraint =  fromJoinConstraints[i];
-//                  if(where.length>0){
-//                     where+= " AND ";
-//                 }
-//                 where += fromTable.name +"."+constraint[0] + " = "+ joinTable.name+"."+constraint[1];
-//             }
-//             console.log(joinFromConstraints);
-//              for( i = 0; i<joinFromConstraints.length; i++){
-//                 var fconstraint =  joinFromConstraints[i];
-//                 if(where.length>0){
-//                     where+= " AND ";
-//                 }
-//                 where += fromTable.name +"."+fconstraint[1] + " = "+ joinTable.name+"."+fconstraint[0];
-//             }
-//              for( i = 0; i<toJoinConstraints.length; i++){
-//                 var tjconstraint =  toJoinConstraints[i];
-//                  if(where.length>0){
-//                     where+= " AND ";
-//                 }
-//                 where += joinTable.name +"."+tjconstraint[1] + " = "+ asCast+"."+tjconstraint[0];
-//             }
-//              for( i = 0; i<joinToConstraints.length; i++){
-//                 var jtconstraint =  joinToConstraints[i];
-//                  if(where.length>0){
-//                     where+= " AND ";
-//                 }
-//                 where += joinTable.name +"."+jtconstraint[0] + " = "+ asCast+"."+jtconstraint[1];
-//             }
-//             var tProjection = StateKeeper.getTableProjection(fromTable);
-//             return "SELECT DISTINCT "+ tProjection + " FROM " + fromTable.name +", " + joinTable.name +", " +tSubQuery+" WHERE " + where;
-
-//         }
-
-//     },
-
-//     extractCurrentNode: function(parseTree){
-
-//     },
-//     isValidStatement: function(parseTree){
-
-//     },
-//     joinTables: function(tableList){
-
-//     },
-
-// };
 
 
 var StateKeeper = {
@@ -477,6 +260,12 @@ var StateKeeper = {
         var nounTable = StateKeeper.getTable(noun,nounTables);
         var verbTable =  StateKeeper.getTable(verb,verbTables);
         if(nounTable===null||verbTable===null){
+            if(nounTable===null){
+                console.log("failed to find "+ noun+ " as noun");
+            }
+            if(verTable===null){
+                console.log("failed to find "+ ver+ " as verb");
+            }
             console.log("failed to find table");
             return false;
         }
@@ -574,19 +363,25 @@ var ParseDirector = {
         try{
             var parseTree = parser.parse(query);
              console.log(parseTree);
-             var sqlStatement = SQLBuilder.buildSQLStatement(parseTree);
+             var sqlStatement = SQLBuilder.buildSQLStatement(parseTree,true);
              console.log("I made it!");
              console.log(sqlStatement);
-             updatefunction(sqlStatement);
+             updatefunction(sqlStatement,true);
         }
         catch(err){
             console.log("Error :(");
             console.log(err);
+            updatefuction(sqlStatement,false);
         }
+        recursionCounter = 0;
 
     }
 
 };
+
+function isNumber(n) {
+  return !isNaN(parseFloat(n));
+}
 
 function contains(array, str) {
     var i = array.length;

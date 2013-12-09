@@ -1,5 +1,5 @@
 
-$.getScript("../static/js/expose_library/test.js");
+$.getScript("../static/js/expose_library/SchemaDirector.js");
 $.getScript("../static/js/expose_library/parser.js");
 
 
@@ -29,7 +29,8 @@ var makeQuery = function(query){
   });
 };
 
-makeQuery("SELECT * FROM Bar");
+
+
 
 $( document ).ready(function() {
    doExpose();
@@ -42,14 +43,50 @@ function doExpose(){
       var query = $(".expose_search_bar").val();
       console.log(query);
       console.log(window.parser);
-         ParseDirector.parse(query, window.parser, window.processQuery);
+      ParseDirector.parse(query, window.parser, window.processQuery);
     }
+    if (event.keyCode === 32) {
+            var word = $(".expose_search_bar").val();
+            words = word.split(" ");
+            console.log(words);
+            fillTablePrompts(words);
+      }
 });
+
+function fillTablePrompts(words){
+  // $(".filter_prompts").text("BOOO!");
+   for(var j = words.length-2; j>=0; j--)
+   {
+     var table =  StateKeeper.getTable(words[j]);
+      if(table!==null){
+         console.log(table);
+         var trans = StateKeeper.getValidStateTransfers(table.name);
+         //console.log(trans);
+         var transString = "";
+         for(var i = 0; i<trans.length; i++){
+            //console.log(trans[i]);
+            transString+= (trans[i][0] +" " +trans[i][1]+" ");
+         }
+
+         var filters = StateKeeper.getFilterPromptsForTable(table.name);
+         var filterString = "";
+         for(i =0; i<filters.length; i++){
+            filterString += (filters[i] + " ");
+         }
+         $(".filter_prompts").text(filterString);
+         $(".table_prompts").text(transString);
+         break;
+      }
+   }
+}
 
 
 
 }
-var processQuery = function(query){
+var processQuery = function(query, goodParseTree){
+   if(!goodParseTree){
+      $(".parsed_sql").text("We failed to generate a good parse tree");
+   }
    $(".parsed_sql").text("We parsed: "+query);
    if(query!==null){
       makeQuery(query);

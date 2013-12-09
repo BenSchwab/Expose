@@ -1,1 +1,136 @@
-{"tables": [{"mapsTo": [], "expose": true, "name": "Bar", "columns": [{"mapsTo": [], "expose": true, "references": "", "name": "name"}, {"mapsTo": [], "expose": true, "references": "", "name": "address"}]}, {"mapsTo": [], "expose": true, "name": "Beer", "columns": [{"mapsTo": [], "expose": true, "references": "", "name": "name"}, {"mapsTo": [], "expose": true, "references": "", "name": "brewer"}]}, {"mapsTo": [], "expose": true, "name": "Drinker", "columns": [{"mapsTo": [], "expose": true, "references": "", "name": "name"}, {"mapsTo": [], "expose": true, "references": "", "name": "address"}]}, {"mapsTo": [], "expose": true, "name": "Frequents", "columns": [{"mapsTo": [], "expose": true, "references": "Drinker.name", "name": "drinker"}, {"mapsTo": [], "expose": true, "references": "Bar.name", "name": "bar"}, {"mapsTo": [], "expose": true, "references": "", "name": "times_a_week"}]}, {"mapsTo": [], "expose": true, "name": "Likes", "columns": [{"mapsTo": [], "expose": true, "references": "Drinker.name", "name": "drinker"}, {"mapsTo": [], "expose": true, "references": "Beer.name", "name": "beer"}]}, {"mapsTo": [], "expose": true, "name": "Serves", "columns": [{"mapsTo": [], "expose": true, "references": "Bar.name", "name": "bar"}, {"mapsTo": [], "expose": true, "references": "Beer.name", "name": "beer"}, {"mapsTo": [], "expose": true, "references": "", "name": "price"}]}]}
+{
+  "tables": [
+    {
+      "mapsTo": ["Bars, Bar,Pub, Pubs"],
+      "wordType": "noun",
+      "expose": true,
+      "name": "Bar",
+      "columns": [
+        {
+          "mapsTo": ["Bar","Pub","Bars","Pubs"],
+          "expose": true,
+          "references": "",
+          "name": "name"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "address"
+        }
+      ]
+    },
+    {
+      "mapsTo": [],
+      "wordType": "noun",
+      "expose": true,
+      "name": "Beer",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "name"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "brewer"
+        }
+      ]
+    },
+    {
+      "mapsTo": ["Drinkers","People","Person","Persons"],
+      "wordType": "noun",
+      "expose": true,
+      "name": "Drinker",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "name"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "address"
+        }
+      ]
+    },
+    {
+      "mapsTo": [],
+      "wordType": "verb",
+      "expose": true,
+      "name": "Frequents",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Drinker.name",
+          "name": "drinker"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Bar.name",
+          "name": "bar"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "times_a_week"
+        }
+      ]
+    },
+    {
+      "mapsTo": [],
+      "wordType": "verb",
+      "expose": true,
+      "name": "Likes",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Drinker.name",
+          "name": "drinker"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Beer.name",
+          "name": "beer"
+        }
+      ]
+    },
+    {
+      "mapsTo": [],
+      "wordType": "verb",
+      "expose": true,
+      "name": "Serves",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Bar.name",
+          "name": "bar"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Beer.name",
+          "name": "beer"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "price"
+        }
+      ]
+    }
+  ]
+}
