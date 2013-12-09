@@ -1,12 +1,12 @@
 import sqlite3
 import json
-import en
+import en, sys
 
 
 #TODO: read a database - parse out the structure return a config.json file
 
-def parseDatabase():
-   conn = sqlite3.connect('drinkers.db')
+def parseDatabase(filename):
+   conn = sqlite3.connect(filename)
    conn.row_factory = sqlite3.Row
    c = conn.cursor();
    tables = list()
@@ -40,14 +40,16 @@ def parseDatabase():
                ind = 0
             fColumn = q[l].split(" ")[ind]
             #print(fColumn +" references")
+            print(q)
             fromColumn = fromTable.getColumn(fColumn)
+
             p = ref[1].split("(")
             table = p[0].strip()
             oColumn = p[1].replace(")", "").strip()
             otherTable = myDatabase.getTable(table)
             otherColumn = otherTable.getColumn(oColumn)
             fromColumn.references = otherTable.name+"."+otherColumn.name
-
+            
             #print "Table: "+table+", Column: "+column
    config = open('config.json', 'w')
    j = json.dumps(myDatabase, default=lambda o: o.__dict__)
@@ -115,4 +117,4 @@ class References:
       return 'hello world'
 
 if __name__ == '__main__':
-  parseDatabase()
+  parseDatabase(sys.argv[1])
