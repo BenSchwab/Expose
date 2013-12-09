@@ -1,6 +1,6 @@
 .expose_search_bar
 {
-   width: 600px;
+   width: 800px;
    height: 24px;
    font-size: 20px;
    margin: auto;
@@ -87,9 +87,10 @@
   font-size: 18px;
   text-align: center;
   font-family: 'Fira';
-
-  height: 50px;
+  margin-top: 20px;
+  height: 70px;
   overflow-y: scroll;
+  padding: 5px;
 }
 
 #table_result{

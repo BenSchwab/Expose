@@ -123,7 +123,7 @@ function getTableCast(recursionCounter){
 var SQLBuilder = {
 
     buildSQLStatement: function(parseTree){
-       if (parseTree instanceof Array) {
+        if (parseTree instanceof Array) {
             parseTree = parseTree[0];
         }
         console.log("I was called!");
@@ -565,6 +565,26 @@ var StateKeeper = {
         return prompts;
 
      }
+
+};
+
+var ParseDirector = {
+
+    parse : function(query, parser, updatefunction){
+        try{
+            var parseTree = parser.parse(query);
+             console.log(parseTree);
+             var sqlStatement = SQLBuilder.buildSQLStatement(parseTree);
+             console.log("I made it!");
+             console.log(sqlStatement);
+             updatefunction(sqlStatement);
+        }
+        catch(err){
+            console.log("Error :(");
+            console.log(err);
+        }
+
+    }
 
 };
 

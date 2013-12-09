@@ -1,4 +1,8 @@
 
+$.getScript("../static/js/expose_library/test.js");
+$.getScript("../static/js/expose_library/parser.js");
+
+
 var makeQuery = function(query){
 
   var url = "http://localhost:5001/query_row/" + query;
@@ -27,3 +31,27 @@ var makeQuery = function(query){
 
 makeQuery("SELECT * FROM Bar");
 
+$( document ).ready(function() {
+   doExpose();
+});
+
+function doExpose(){
+   $(".expose_search_list").hide();
+   $(".expose_search_bar").keyup(function(event){
+    if(event.keyCode == 13){
+      var query = $(".expose_search_bar").val();
+      console.log(query);
+      console.log(window.parser);
+         ParseDirector.parse(query, window.parser, window.processQuery);
+    }
+});
+
+
+
+}
+var processQuery = function(query){
+   $(".parsed_sql").text("We parsed: "+query);
+   if(query!==null){
+      makeQuery(query);
+   }
+};
