@@ -1,15 +1,45 @@
 {
-  function isSubject(t) {
+  function isNoun(t) {
     return true;
   }
-
+  
   function isVerb(t) {
     return true;
   }
-
-  function isObject(t) {
+  
+  function isAttribute(t) {
     return true;
   }
+
+
+/*
+  nouns = ['beer', 'beers', 'drinker', 'drinkers', 'bar', 'bars'];
+  verbs = ['like', 'liked', 'served'];
+  attribute = ['name', 'price'];
+
+  function isNoun(t) {
+    return nouns.indexOf(t) >= 0;
+  }
+
+  function isVerb(t) {
+    return verbs.indexOf(t) >= 0;
+  }
+
+  function isAttribute(t) {
+    return attribute.indexOf(t) >= 0;
+  }
+*/
+/*
+  function isNoun(t) {
+    var nouns = StateKeeper.getNounTables().map(function (e) { return e.name; });
+    return nouns.indexOf(t) >= 0;
+  }
+
+  function isVerb(t) {
+    var verbs = StateKeeper.getVerbTables().map(function (e) { return e.name; });
+    return verbs.indexOf(t) >= 0;
+  }
+*/
 
   function isRelationFilter(obj) {
     return obj.type == 'relation';
@@ -34,12 +64,12 @@
     return node;
   }
 
-  function createNodeFilter(select, relation, query_continuation) {
+  function createNodeFilter(select, relation, negate, query_continuation) {
     return {
       select: select, 
       filters: 
         [ 
-          { type: 'relation', relation: relation, target: { select: query_continuation.select, filters: query_continuation.filters } } 
+          { type: 'relation', relation: relation, negate: negate, target: { select: query_continuation.select, filters: query_continuation.filters } } 
         ].concat(query_continuation.moveup != undefined ? query_continuation.moveup : [] ) 
     };
   }
@@ -62,55 +92,56 @@ command
   = 'find'i sp query:query '\n'* { return processRootNode(query); }
 
 query
-  = s:subject sa_conn? !prep a:attribute op:oper sp arg:argument qc:query_cont* { return createLeafAttributeFilter(s, a, op, arg, qc); }
-  / o:object ov_conn? !prep v:verb vs_conn? q:query { return createNodeFilter(o, v, q); }
-  / s:subject sv_conn? !prep v:verb q:query { return createNodeFilter(s, v, q); }
-  / s:subject { return { select:s } }
+  = n:noun na_conn? !rsvd a:attribute op:oper sp arg:argument qc:query_cont* { return createLeafAttributeFilter(n, a, op, arg, qc); }
+  / n:noun nv_conn? neg:negateSp? !rsvd v:verb vn_conn? q:query { return createNodeFilter(n, v, neg!="", q); }
 
-query_cont
+query_cont 
   = 'and'i sp a:attribute op:oper sp arg:argument { return { type: 'attribute', attribute: a, operation: op, argument: arg } }
-  / 'and'i sp ov_conn? !prep v:verb vs_conn? q:query { return { type: 'relation', relation: v, target: q } }
+  / 'and'i sp nv_conn? neg:negateSp? !rsvd v:verb vn_conn? q:query { return { type: 'relation', relation: v, negate: neg!="", target: q } }
 
 token
-  = t:[0-9a-zA-Z]+ sp { return t.join(""); }
+  = t:[0-9a-zA-Z]+ { return t.join(""); }
 
-subject
-  = t:token & { return isSubject(t); } { return t; }
+tokenSpOpt
+  = t:token [ ]* { return t; }
 
-verb
-  = t:token & { return isVerb(t); } { return t; }
+tokenSpReq
+  = t:token sp { return t; }
 
-object
-  = t:token & { return isObject(t); } { return t; }
+noun "@noun"
+  = t:tokenSpReq { return t; }
+  / t:tokenSpOpt & { return isNoun(t); } { return t; }
+ 
+verb "@verb"
+  = t:tokenSpReq { return t; }
+  / t:tokenSpOpt & { return isVerb(t); } { return t; }
 
-attribute "table attribute"
-  = t:token 
+attribute "@table_attribute"
+  = t:tokenSpReq { return t; }
+  / t:tokenSpOpt & { return isAttribute(t); } { return t; }
 
-argument "comparison argument"
-  = t:token
+argument "@comparison_argument"
+  = t:tokenSpOpt { return t; }
 
-sa_conn
+na_conn
   = 'with'i sp
 
-sv_conn
+nv_conn
   = 'who'i sp
   / 'that'i sp
 
-ov_conn
-  = 'that'i sp
-
-vs_conn
+vn_conn
   = 'by'i sp
 
-oper "comparison operator"
-  = 'greater or equal than'i { return '>='; }
-  / 'lesser or equal than'i { return '<='; }
-  / 'greater than'i { return '>'; }
-  / 'lesser than'i { return '<'; }
+oper "@comparison_operator"
+  = 'greater'i sp 'or'i sp 'equal'i sp 'than'i { return '>='; }
+  / 'lesser'i sp 'or'i sp 'equal'i sp 'than'i { return '<='; }
+  / 'greater'i sp 'than'i { return '>'; }
+  / 'lesser'i sp 'than'i { return '<'; }
   / 'equals'i { return '='; }
-  / 'not equals'i { return '!='; }
-  / 'different than'i { return '!='; }
-  / 'is' { return '='; }
+  / 'not'i sp 'equals'i { return '!='; }
+  / 'different'i sp 'than'i { return '!='; }
+  / 'is'i { return '='; }
   / '<=' { return '<='; }
   / '>=' { return '>='; }
   / '==' { return '='; }
@@ -125,9 +156,16 @@ prep
   / 'who'i
   / 'by'i
 
+negate
+  = 'not'i { return true; }
+
+negateSp
+  = neg:negate sp { return neg; }
+
 rsvd
   = prep
   / oper
+  / negate
 
 sp
-  = [ ]* { return [] }
+  = [ ]+ { return []; }

@@ -6,6 +6,8 @@ find beers liked by drinkers with name = Ben and name not equals Dan
 find beers liked by drinkers with name = Ben and served by bars name equals Satisfaction
 find beers name is Corona
 find beers with price > 5 and liked by drinkers with name = Ben
+find beers not liked by drinkers with name = Ben and served by bars name equals Satisfaction
+
 
 will produce the following array of trees:
 
@@ -16,12 +18,14 @@ will produce the following array of trees:
          {
             "type": "relation",
             "relation": "like",
+            "negate": false,
             "target": {
                "select": "beers",
                "filters": [
                   {
                      "type": "relation",
                      "relation": "served",
+                     "negate": false,
                      "target": {
                         "select": "bars",
                         "filters": [
@@ -45,12 +49,14 @@ will produce the following array of trees:
          {
             "type": "relation",
             "relation": "liked",
+            "negate": false,
             "target": {
                "select": "drinkers",
                "filters": [
                   {
                      "type": "relation",
                      "relation": "frequent",
+                     "negate": false,
                      "target": {
                         "select": "bars",
                         "filters": [
@@ -74,6 +80,7 @@ will produce the following array of trees:
          {
             "type": "relation",
             "relation": "liked",
+            "negate": false,
             "target": {
                "select": "drinkers",
                "filters": [
@@ -100,6 +107,7 @@ will produce the following array of trees:
          {
             "type": "relation",
             "relation": "liked",
+            "negate": false,
             "target": {
                "select": "drinkers",
                "filters": [
@@ -115,6 +123,7 @@ will produce the following array of trees:
          {
             "type": "relation",
             "relation": "served",
+            "negate": false,
             "target": {
                "select": "bars",
                "filters": [
@@ -152,6 +161,7 @@ will produce the following array of trees:
          {
             "type": "relation",
             "relation": "liked",
+            "negate": false,
             "target": {
                "select": "drinkers",
                "filters": [
@@ -160,6 +170,43 @@ will produce the following array of trees:
                      "attribute": "name",
                      "operation": "=",
                      "argument": "Ben"
+                  }
+               ]
+            }
+         }
+      ]
+   },
+   {
+      "select": "beers",
+      "filters": [
+         {
+            "type": "relation",
+            "relation": "liked",
+            "negate": true,
+            "target": {
+               "select": "drinkers",
+               "filters": [
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Ben"
+                  }
+               ]
+            }
+         },
+         {
+            "type": "relation",
+            "relation": "served",
+            "negate": false,
+            "target": {
+               "select": "bars",
+               "filters": [
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Satisfaction"
                   }
                ]
             }
