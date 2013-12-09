@@ -32,15 +32,22 @@ def parseDatabase(filename):
          for s in stats:
             if not "REFERENCES" in s: continue
             ref = s.split("REFERENCES")
-            q = ref[0].split("(")
+            p = ref[0]
+            print(p)
+            q = p.strip().split("(")
             l = 0
-            ind = 1
+            ind = 0
             if q[0].split(" ")[0] == "CREATE":
                l = 1
                ind = 0
+               print "found create"
             fColumn = q[l].split(" ")[ind]
-            #print(fColumn +" references")
+            #print(q[0] +" "+ q[1])
+            print ind
+            print l
+            print(q[l].split(" "))
             print(q)
+            print(q[0])
             fromColumn = fromTable.getColumn(fColumn)
 
             p = ref[1].split("(")
@@ -49,7 +56,7 @@ def parseDatabase(filename):
             otherTable = myDatabase.getTable(table)
             otherColumn = otherTable.getColumn(oColumn)
             fromColumn.references = otherTable.name+"."+otherColumn.name
-            
+
             #print "Table: "+table+", Column: "+column
    config = open('config.json', 'w')
    j = json.dumps(myDatabase, default=lambda o: o.__dict__)
@@ -100,10 +107,10 @@ class Table:
         else:
           self.wordType = "verb"
           self.mapsTo = [en.verb.infinitive(tableName), en.verb.present(tableName, person=3, negate=False), en.verb.past(tableName), en.verb.present_participle(tableName)]
-        
+
         self.columns = []
         self.expose = True;
-        
+
    def getReferences(self):
       return
    def getColumn(self, columnName):
@@ -112,9 +119,6 @@ class Table:
             return c
       return None
 
-class References:
-   def f(self):
-      return 'hello world'
 
 if __name__ == '__main__':
   parseDatabase(sys.argv[1])

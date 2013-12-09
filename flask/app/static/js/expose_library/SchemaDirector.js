@@ -1,6 +1,6 @@
 
 var myDatabaseConfig;
-$.getJSON('../static/js/config.json', function(data){myDatabaseConfig = data;});
+$.getJSON('../static/js/music_config.json', function(data){myDatabaseConfig = data;});
 
 
 var recursionCounter = 0;
@@ -74,18 +74,14 @@ var SQLBuilder = {
                     console.log("SQL build failed. " + to +" is not a valid table or mapped table");
                     return null;
                 }
-                  //TODO: optional breaks non edited config
                 if(!StateKeeper.validNounVerbTransition(from, join)){
                     console.log("SQL build failed. " + from +" joined with " + join +" is not a valid noun-verb pair.");
-                    return null;
+                    console.log("WARNING UNSAFE");
                 }
                 if(!StateKeeper.validNounVerbTransition(to, join)){
                     console.log("SQL build failed. " + to +" joined with " + join +" is not a valid noun-verb pair.");
-                    return null;
+                    console.log("WARNING UNSAFE");
                 }
-                console.log("fTable"+fromTable);
-                console.log("tTable"+toTable);
-                console.log("jTable"+joinTable);
                 var fromJoinConstraints = StateKeeper.getContrainsts(fromTable,joinTable);
                 var joinFromConstraints = StateKeeper.getContrainsts(joinTable,fromTable);
                 var toJoinConstraints = StateKeeper.getContrainsts(toTable,joinTable);
@@ -140,21 +136,8 @@ var SQLBuilder = {
 
         return (selectClause +" " +fromClause + " "+whereClause);
 
-
-
-
-
     },
 
-    extractCurrentNode: function(parseTree){
-
-    },
-    isValidStatement: function(parseTree){
-
-    },
-    joinTables: function(tableList){
-
-    },
 
 };
 
@@ -205,18 +188,6 @@ var StateKeeper = {
         var refColumn = refD[1];
         return [fromTable, refTable, refColumn];
     },
-     getNouns : function(){
-        nouns = [];
-        for(var i = 0; i<myDatabaseConfig.tables.length; i++){
-            var table = myDatabaseConfig.tables[i];
-            var name = table.name;
-            if(table.mapsTo.length!==0){
-                name = table.mapsTo;
-            }
-            nouns.push(name);
-        }
-        return nouns;
-     },
      getTableProjection: function(fromTable){
         var projectionString = "";
         for(var i = 0; i<fromTable.columns.length; i++){
@@ -267,7 +238,7 @@ var StateKeeper = {
                 console.log("failed to find "+ noun+ " as noun");
             }
             if(verbTable===null){
-                console.log("failed to find "+ ver+ " as verb");
+                console.log("failed to find "+ verb+ " as verb");
             }
             console.log("failed to find table");
             return false;
@@ -367,7 +338,10 @@ var ParseDirector = {
             var parseTree = parser.parse(query);
              console.log(parseTree);
              var sqlStatement = SQLBuilder.buildSQLStatement(parseTree,true);
-             console.log("I made it!");
+             if(sqlStatement===null){
+                console.log("error parsing sql");
+             }
+
              console.log(sqlStatement);
              console.log(updatefunction);
              updatefunction(sqlStatement,true);
@@ -375,7 +349,7 @@ var ParseDirector = {
         catch(err){
             console.log("Error :(");
             console.log(err);
-            updatefuction(sqlStatement,false);
+            updatefunction(err,false);
         }
         recursionCounter = 0;
 

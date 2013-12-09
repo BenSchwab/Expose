@@ -85,7 +85,7 @@ function fillTablePrompts(words){
 }
 var processQuery = function(query, goodParseTree){
    if(!goodParseTree){
-      $(".parsed_sql").text("We failed to generate a good parse tree");
+      $(".parsed_sql").text("We failed to generate good sql.");
    }
    $(".parsed_sql").text("We parsed: "+query);
    if(query!==null){
