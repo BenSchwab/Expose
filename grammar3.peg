@@ -44,13 +44,22 @@
     };
   }
 
+  function processRootNode(query) {
+    // if root has filters to move up, append to current filters (apply to same level)
+    if (query.moveup && query.moveup.length != 0) {
+      query.filters = query.filters.concat(query.moveup);
+      delete query["moveup"];
+    }
+    return query
+  }
+
 }
 
 start
   = command+
 
 command
-  = 'find'i sp query:query '\n'* { return query; }
+  = 'find'i sp query:query '\n'* { return processRootNode(query); }
 
 query
   = s:subject sa_conn? !prep a:attribute op:oper sp arg:argument qc:query_cont* { return createLeafAttributeFilter(s, a, op, arg, qc); }

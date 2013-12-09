@@ -5,6 +5,7 @@ find beers liked drinkers frequent bars name = Satisfaction
 find beers liked by drinkers with name = Ben and name not equals Dan
 find beers liked by drinkers with name = Ben and served by bars name equals Satisfaction
 find beers name is Corona
+find beers with price > 5 and liked by drinkers with name = Ben
 
 will produce the following array of trees:
 
@@ -136,6 +137,32 @@ will produce the following array of trees:
             "attribute": "name",
             "operation": "=",
             "argument": "Corona"
+         }
+      ]
+   },
+   {
+      "select": "beers",
+      "filters": [
+         {
+            "type": "attribute",
+            "attribute": "price",
+            "operation": ">",
+            "argument": "5"
+         },
+         {
+            "type": "relation",
+            "relation": "liked",
+            "target": {
+               "select": "drinkers",
+               "filters": [
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Ben"
+                  }
+               ]
+            }
          }
       ]
    }

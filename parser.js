@@ -187,7 +187,7 @@ parser = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, query) { return query; })(pos0, result0[2]);
+          result0 = (function(offset, query) { return processRootNode(query); })(pos0, result0[2]);
         }
         if (result0 === null) {
           pos = pos0;
@@ -1290,6 +1290,15 @@ parser = (function(){
                 { type: 'relation', relation: relation, target: { select: query_continuation.select, filters: query_continuation.filters } } 
               ].concat(query_continuation.moveup != undefined ? query_continuation.moveup : [] ) 
           };
+        }
+      
+        function processRootNode(query) {
+          // if root has filters to move up, append to current filters (apply to same level)
+          if (query.moveup && query.moveup.length != 0) {
+            query.filters = query.filters.concat(query.moveup);
+            delete query["moveup"];
+          }
+          return query
         }
       
       
