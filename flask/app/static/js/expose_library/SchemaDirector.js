@@ -83,6 +83,9 @@ var SQLBuilder = {
                     console.log("SQL build failed. " + to +" joined with " + join +" is not a valid noun-verb pair.");
                     return null;
                 }
+                console.log("fTable"+fromTable);
+                console.log("tTable"+toTable);
+                console.log("jTable"+joinTable);
                 var fromJoinConstraints = StateKeeper.getContrainsts(fromTable,joinTable);
                 var joinFromConstraints = StateKeeper.getContrainsts(joinTable,fromTable);
                 var toJoinConstraints = StateKeeper.getContrainsts(toTable,joinTable);
@@ -263,7 +266,7 @@ var StateKeeper = {
             if(nounTable===null){
                 console.log("failed to find "+ noun+ " as noun");
             }
-            if(verTable===null){
+            if(verbTable===null){
                 console.log("failed to find "+ ver+ " as verb");
             }
             console.log("failed to find table");
@@ -366,6 +369,7 @@ var ParseDirector = {
              var sqlStatement = SQLBuilder.buildSQLStatement(parseTree,true);
              console.log("I made it!");
              console.log(sqlStatement);
+             console.log(updatefunction);
              updatefunction(sqlStatement,true);
         }
         catch(err){

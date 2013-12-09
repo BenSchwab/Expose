@@ -7,7 +7,7 @@
       "name": "Bar",
       "columns": [
         {
-          "mapsTo": ["Bar","Pub","Bars","Pubs"],
+          "mapsTo": [],
           "expose": true,
           "references": "",
           "name": "name"
@@ -21,13 +21,13 @@
       ]
     },
     {
-      "mapsTo": [],
+      "mapsTo": ["Beers","Beer","Brew","Brews"],
       "wordType": "noun",
       "expose": true,
       "name": "Beer",
       "columns": [
         {
-          "mapsTo": [],
+          "mapsTo": ["called","name","named"],
           "expose": true,
           "references": "",
           "name": "name"
@@ -61,7 +61,7 @@
       ]
     },
     {
-      "mapsTo": [],
+      "mapsTo": ["Frequents","Frequented","Frequent","Frequenter"],
       "wordType": "verb",
       "expose": true,
       "name": "Frequents",
@@ -87,7 +87,7 @@
       ]
     },
     {
-      "mapsTo": [],
+      "mapsTo": ["Likes","Like","Liked"],
       "wordType": "verb",
       "expose": true,
       "name": "Likes",
@@ -107,7 +107,7 @@
       ]
     },
     {
-      "mapsTo": [],
+      "mapsTo": ["Serves","Serve","Served"],
       "wordType": "verb",
       "expose": true,
       "name": "Serves",
