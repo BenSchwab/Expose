@@ -1,0 +1,142 @@
+this set of queries:
+
+find drinkers that like beers served by bars name = Satisfaction
+find beers liked drinkers frequent bars name = Satisfaction
+find beers liked by drinkers with name = Ben and name = Dan
+find beers liked by drinkers with name = Ben and served by bars name = Satisfaction
+find beers name = Corona
+
+will produce the following array of trees:
+
+[
+   {
+      "select": "drinkers",
+      "filters": [
+         {
+            "type": "relation",
+            "relation": "like",
+            "target": {
+               "select": "beers",
+               "filters": [
+                  {
+                     "type": "relation",
+                     "relation": "served",
+                     "target": {
+                        "select": "bars",
+                        "filters": [
+                           {
+                              "type": "attribute",
+                              "attribute": "name",
+                              "operation": "=",
+                              "argument": "Satisfaction"
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      ]
+   },
+   {
+      "select": "beers",
+      "filters": [
+         {
+            "type": "relation",
+            "relation": "liked",
+            "target": {
+               "select": "drinkers",
+               "filters": [
+                  {
+                     "type": "relation",
+                     "relation": "frequent",
+                     "target": {
+                        "select": "bars",
+                        "filters": [
+                           {
+                              "type": "attribute",
+                              "attribute": "name",
+                              "operation": "=",
+                              "argument": "Satisfaction"
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      ]
+   },
+   {
+      "select": "beers",
+      "filters": [
+         {
+            "type": "relation",
+            "relation": "liked",
+            "target": {
+               "select": "drinkers",
+               "filters": [
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Ben"
+                  },
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Dan"
+                  }
+               ]
+            }
+         }
+      ]
+   },
+   {
+      "select": "beers",
+      "filters": [
+         {
+            "type": "relation",
+            "relation": "liked",
+            "target": {
+               "select": "drinkers",
+               "filters": [
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Ben"
+                  }
+               ]
+            }
+         },
+         {
+            "type": "relation",
+            "relation": "served",
+            "target": {
+               "select": "bars",
+               "filters": [
+                  {
+                     "type": "attribute",
+                     "attribute": "name",
+                     "operation": "=",
+                     "argument": "Satisfaction"
+                  }
+               ]
+            }
+         }
+      ]
+   },
+   {
+      "select": "beers",
+      "filters": [
+         {
+            "type": "attribute",
+            "attribute": "name",
+            "operation": "=",
+            "argument": "Corona"
+         }
+      ]
+   }
+]
