@@ -1,0 +1,72 @@
+{
+  function isSubject(t) {
+    return true;
+  }
+
+  function isVerb(t) {
+    return true;
+  }
+
+  function isObject(t) {
+    return true;
+  }
+}
+
+start
+  = command
+
+command
+  = 'find'i sp query:query { return query; }
+
+query
+  = s:subject sa_conn !prep a:attribute op:oper sp arg:argument { return {select: s, attribute: a, operation: op, argument: arg} }
+  / o:object ov_conn? !prep v:verb vs_conn q:query { return {select: o, relation: v, target: q} }
+  / s:subject sv_conn? !prep v:verb q:query { return {select: s, relation: v, target: q} }
+
+token
+  = t:[0-9a-zA-Z]+ sp { return t.join(""); }
+
+subject
+  = t:token & { return isSubject(t); } { return t; }
+
+verb
+  = t:token & { return isVerb(t); } { return t; }
+
+object
+  = t:token & { return isObject(t); } { return t; }
+
+attribute "table attribute"
+  = t:token 
+
+argument "comparison argument"
+  = t:token
+
+sa_conn
+  = 'with'i sp
+
+sv_conn
+  = 'who'i sp
+  / 'that'i sp
+
+ov_conn
+  = 'that'i sp
+
+vs_conn
+  = 'by'i sp
+
+oper "comparison operator"
+  = '<='
+  / '>='
+  / '=='
+  / '<'
+  / '>'
+  / '='
+
+prep
+  = 'with'
+  / 'who'
+  / 'that'
+  / 'by'
+
+sp
+  = [ ]* { return [] }
