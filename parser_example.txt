@@ -1,10 +1,10 @@
 this set of queries:
 
-find drinkers that like beers served by bars name = Satisfaction
+find drinkers that like beers served by bars name greater or equal than Satisfaction
 find beers liked drinkers frequent bars name = Satisfaction
-find beers liked by drinkers with name = Ben and name = Dan
-find beers liked by drinkers with name = Ben and served by bars name = Satisfaction
-find beers name = Corona
+find beers liked by drinkers with name = Ben and name not equals Dan
+find beers liked by drinkers with name = Ben and served by bars name equals Satisfaction
+find beers name is Corona
 
 will produce the following array of trees:
 
@@ -27,7 +27,7 @@ will produce the following array of trees:
                            {
                               "type": "attribute",
                               "attribute": "name",
-                              "operation": "=",
+                              "operation": ">=",
                               "argument": "Satisfaction"
                            }
                         ]
@@ -85,7 +85,7 @@ will produce the following array of trees:
                   {
                      "type": "attribute",
                      "attribute": "name",
-                     "operation": "=",
+                     "operation": "!=",
                      "argument": "Dan"
                   }
                ]

@@ -10,19 +10,57 @@
   function isObject(t) {
     return true;
   }
+
+  function isRelationFilter(obj) {
+    return obj.type == 'relation';
+  }
+
+  function isAttributeFilter(obj) {
+    return obj.type == 'attribute';
+  }
+
+  function createLeafAttributeFilter(select, attribute, operation, arg, query_continuations) {
+    var node = { 
+      select: select, 
+      filters: 
+        [ 
+          { type: 'attribute', attribute: attribute, operation: operation, argument: arg } 
+        ].concat(query_continuations.filter(isAttributeFilter)), 
+      moveup: query_continuations.filter(isRelationFilter) 
+    };
+    if (!node.moveup || node.moveup.length == 0) {
+      delete node["moveup"];
+    }
+    return node;
+  }
+
+  function createNodeFilter(select, relation, query_continuation) {
+    return {
+      select: select, 
+      filters: 
+        [ 
+          { type: 'relation', relation: relation, target: { select: query_continuation.select, filters: query_continuation.filters } } 
+        ].concat(query_continuation.moveup != undefined ? query_continuation.moveup : [] ) 
+    };
+  }
+
 }
 
 start
-  = (command '\n'+)+
+  = command+
 
 command
-  = 'find'i sp query:query { return query; }
+  = 'find'i sp query:query '\n'* { return query; }
 
 query
-  = s:subject sa_conn? !prep a:attribute op:oper sp arg:argument { return {select: s, attribute: a, operation: op, argument: arg} }
-  / o:object ov_conn? !prep v:verb vs_conn? q:query { return {select: o, relation: v, target: q} }
-  / s:subject sv_conn? !prep v:verb q:query { return {select: s, relation: v, target: q} }
-  / s:subject { return {select:s}}
+  = s:subject sa_conn? !prep a:attribute op:oper sp arg:argument qc:query_cont* { return createLeafAttributeFilter(s, a, op, arg, qc); }
+  / o:object ov_conn? !prep v:verb vs_conn? q:query { return createNodeFilter(o, v, q); }
+  / s:subject sv_conn? !prep v:verb q:query { return createNodeFilter(s, v, q); }
+  / s:subject { return { select:s } }
+
+query_cont
+  = 'and'i sp a:attribute op:oper sp arg:argument { return { type: 'attribute', attribute: a, operation: op, argument: arg } }
+  / 'and'i sp ov_conn? !prep v:verb vs_conn? q:query { return { type: 'relation', relation: v, target: q } }
 
 token
   = t:[0-9a-zA-Z]+ sp { return t.join(""); }
@@ -56,18 +94,31 @@ vs_conn
   = 'by'i sp
 
 oper "comparison operator"
-  = '<='
-  / '>='
-  / '=='
-  / '<'
-  / '>'
-  / '='
+  = 'greater or equal than'i { return '>='; }
+  / 'lesser or equal than'i { return '<='; }
+  / 'greater than'i { return '>'; }
+  / 'lesser than'i { return '<'; }
+  / 'equals'i { return '='; }
+  / 'not equals'i { return '!='; }
+  / 'different than'i { return '!='; }
+  / 'is' { return '='; }
+  / '<=' { return '<='; }
+  / '>=' { return '>='; }
+  / '==' { return '='; }
+  / '!=' { return '!='; }
+  / '<' { return '<'; }
+  / '>' { return '>'; }
+  / '=' { return '='; }
 
 prep
-  = 'with'
-  / 'who'
-  / 'that'
-  / 'by'
+  = 'with'i
+  / 'that'i
+  / 'who'i
+  / 'by'i
+
+rsvd
+  = prep
+  / oper
 
 sp
   = [ ]* { return [] }

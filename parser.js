@@ -53,6 +53,7 @@ parser = (function(){
         "vs_conn": parse_vs_conn,
         "oper": parse_oper,
         "prep": parse_prep,
+        "rsvd": parse_rsvd,
         "sp": parse_sp
       };
       
@@ -379,31 +380,9 @@ parser = (function(){
             }
             if (result0 === null) {
               pos0 = pos;
-              pos1 = pos;
-              pos2 = pos;
-              reportFailures++;
-              result0 = parse_prep();
-              reportFailures--;
-              if (result0 === null) {
-                result0 = "";
-              } else {
-                result0 = null;
-                pos = pos2;
-              }
+              result0 = parse_subject();
               if (result0 !== null) {
-                result1 = parse_subject();
-                if (result1 !== null) {
-                  result0 = [result0, result1];
-                } else {
-                  result0 = null;
-                  pos = pos1;
-                }
-              } else {
-                result0 = null;
-                pos = pos1;
-              }
-              if (result0 !== null) {
-                result0 = (function(offset, s) { return { select:s } })(pos0, result0[1]);
+                result0 = (function(offset, s) { return { select:s } })(pos0, result0);
               }
               if (result0 === null) {
                 pos = pos0;
@@ -849,65 +828,270 @@ parser = (function(){
       
       function parse_oper() {
         var result0;
+        var pos0;
         
         reportFailures++;
-        if (input.substr(pos, 2) === "<=") {
-          result0 = "<=";
-          pos += 2;
+        pos0 = pos;
+        if (input.substr(pos, 21).toLowerCase() === "greater or equal than") {
+          result0 = input.substr(pos, 21);
+          pos += 21;
         } else {
           result0 = null;
           if (reportFailures === 0) {
-            matchFailed("\"<=\"");
+            matchFailed("\"greater or equal than\"");
           }
         }
+        if (result0 !== null) {
+          result0 = (function(offset) { return '>='; })(pos0);
+        }
         if (result0 === null) {
-          if (input.substr(pos, 2) === ">=") {
-            result0 = ">=";
-            pos += 2;
+          pos = pos0;
+        }
+        if (result0 === null) {
+          pos0 = pos;
+          if (input.substr(pos, 20).toLowerCase() === "lesser or equal than") {
+            result0 = input.substr(pos, 20);
+            pos += 20;
           } else {
             result0 = null;
             if (reportFailures === 0) {
-              matchFailed("\">=\"");
+              matchFailed("\"lesser or equal than\"");
             }
           }
+          if (result0 !== null) {
+            result0 = (function(offset) { return '<='; })(pos0);
+          }
           if (result0 === null) {
-            if (input.substr(pos, 2) === "==") {
-              result0 = "==";
-              pos += 2;
+            pos = pos0;
+          }
+          if (result0 === null) {
+            pos0 = pos;
+            if (input.substr(pos, 12).toLowerCase() === "greater than") {
+              result0 = input.substr(pos, 12);
+              pos += 12;
             } else {
               result0 = null;
               if (reportFailures === 0) {
-                matchFailed("\"==\"");
+                matchFailed("\"greater than\"");
               }
             }
+            if (result0 !== null) {
+              result0 = (function(offset) { return '>'; })(pos0);
+            }
             if (result0 === null) {
-              if (input.charCodeAt(pos) === 60) {
-                result0 = "<";
-                pos++;
+              pos = pos0;
+            }
+            if (result0 === null) {
+              pos0 = pos;
+              if (input.substr(pos, 11).toLowerCase() === "lesser than") {
+                result0 = input.substr(pos, 11);
+                pos += 11;
               } else {
                 result0 = null;
                 if (reportFailures === 0) {
-                  matchFailed("\"<\"");
+                  matchFailed("\"lesser than\"");
                 }
               }
+              if (result0 !== null) {
+                result0 = (function(offset) { return '<'; })(pos0);
+              }
               if (result0 === null) {
-                if (input.charCodeAt(pos) === 62) {
-                  result0 = ">";
-                  pos++;
+                pos = pos0;
+              }
+              if (result0 === null) {
+                pos0 = pos;
+                if (input.substr(pos, 6).toLowerCase() === "equals") {
+                  result0 = input.substr(pos, 6);
+                  pos += 6;
                 } else {
                   result0 = null;
                   if (reportFailures === 0) {
-                    matchFailed("\">\"");
+                    matchFailed("\"equals\"");
                   }
                 }
+                if (result0 !== null) {
+                  result0 = (function(offset) { return '='; })(pos0);
+                }
                 if (result0 === null) {
-                  if (input.charCodeAt(pos) === 61) {
-                    result0 = "=";
-                    pos++;
+                  pos = pos0;
+                }
+                if (result0 === null) {
+                  pos0 = pos;
+                  if (input.substr(pos, 10).toLowerCase() === "not equals") {
+                    result0 = input.substr(pos, 10);
+                    pos += 10;
                   } else {
                     result0 = null;
                     if (reportFailures === 0) {
-                      matchFailed("\"=\"");
+                      matchFailed("\"not equals\"");
+                    }
+                  }
+                  if (result0 !== null) {
+                    result0 = (function(offset) { return '!='; })(pos0);
+                  }
+                  if (result0 === null) {
+                    pos = pos0;
+                  }
+                  if (result0 === null) {
+                    pos0 = pos;
+                    if (input.substr(pos, 14).toLowerCase() === "different than") {
+                      result0 = input.substr(pos, 14);
+                      pos += 14;
+                    } else {
+                      result0 = null;
+                      if (reportFailures === 0) {
+                        matchFailed("\"different than\"");
+                      }
+                    }
+                    if (result0 !== null) {
+                      result0 = (function(offset) { return '!='; })(pos0);
+                    }
+                    if (result0 === null) {
+                      pos = pos0;
+                    }
+                    if (result0 === null) {
+                      pos0 = pos;
+                      if (input.substr(pos, 2) === "is") {
+                        result0 = "is";
+                        pos += 2;
+                      } else {
+                        result0 = null;
+                        if (reportFailures === 0) {
+                          matchFailed("\"is\"");
+                        }
+                      }
+                      if (result0 !== null) {
+                        result0 = (function(offset) { return '='; })(pos0);
+                      }
+                      if (result0 === null) {
+                        pos = pos0;
+                      }
+                      if (result0 === null) {
+                        pos0 = pos;
+                        if (input.substr(pos, 2) === "<=") {
+                          result0 = "<=";
+                          pos += 2;
+                        } else {
+                          result0 = null;
+                          if (reportFailures === 0) {
+                            matchFailed("\"<=\"");
+                          }
+                        }
+                        if (result0 !== null) {
+                          result0 = (function(offset) { return '<='; })(pos0);
+                        }
+                        if (result0 === null) {
+                          pos = pos0;
+                        }
+                        if (result0 === null) {
+                          pos0 = pos;
+                          if (input.substr(pos, 2) === ">=") {
+                            result0 = ">=";
+                            pos += 2;
+                          } else {
+                            result0 = null;
+                            if (reportFailures === 0) {
+                              matchFailed("\">=\"");
+                            }
+                          }
+                          if (result0 !== null) {
+                            result0 = (function(offset) { return '>='; })(pos0);
+                          }
+                          if (result0 === null) {
+                            pos = pos0;
+                          }
+                          if (result0 === null) {
+                            pos0 = pos;
+                            if (input.substr(pos, 2) === "==") {
+                              result0 = "==";
+                              pos += 2;
+                            } else {
+                              result0 = null;
+                              if (reportFailures === 0) {
+                                matchFailed("\"==\"");
+                              }
+                            }
+                            if (result0 !== null) {
+                              result0 = (function(offset) { return '='; })(pos0);
+                            }
+                            if (result0 === null) {
+                              pos = pos0;
+                            }
+                            if (result0 === null) {
+                              pos0 = pos;
+                              if (input.substr(pos, 2) === "!=") {
+                                result0 = "!=";
+                                pos += 2;
+                              } else {
+                                result0 = null;
+                                if (reportFailures === 0) {
+                                  matchFailed("\"!=\"");
+                                }
+                              }
+                              if (result0 !== null) {
+                                result0 = (function(offset) { return '!='; })(pos0);
+                              }
+                              if (result0 === null) {
+                                pos = pos0;
+                              }
+                              if (result0 === null) {
+                                pos0 = pos;
+                                if (input.charCodeAt(pos) === 60) {
+                                  result0 = "<";
+                                  pos++;
+                                } else {
+                                  result0 = null;
+                                  if (reportFailures === 0) {
+                                    matchFailed("\"<\"");
+                                  }
+                                }
+                                if (result0 !== null) {
+                                  result0 = (function(offset) { return '<'; })(pos0);
+                                }
+                                if (result0 === null) {
+                                  pos = pos0;
+                                }
+                                if (result0 === null) {
+                                  pos0 = pos;
+                                  if (input.charCodeAt(pos) === 62) {
+                                    result0 = ">";
+                                    pos++;
+                                  } else {
+                                    result0 = null;
+                                    if (reportFailures === 0) {
+                                      matchFailed("\">\"");
+                                    }
+                                  }
+                                  if (result0 !== null) {
+                                    result0 = (function(offset) { return '>'; })(pos0);
+                                  }
+                                  if (result0 === null) {
+                                    pos = pos0;
+                                  }
+                                  if (result0 === null) {
+                                    pos0 = pos;
+                                    if (input.charCodeAt(pos) === 61) {
+                                      result0 = "=";
+                                      pos++;
+                                    } else {
+                                      result0 = null;
+                                      if (reportFailures === 0) {
+                                        matchFailed("\"=\"");
+                                      }
+                                    }
+                                    if (result0 !== null) {
+                                      result0 = (function(offset) { return '='; })(pos0);
+                                    }
+                                    if (result0 === null) {
+                                      pos = pos0;
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -935,23 +1119,23 @@ parser = (function(){
           }
         }
         if (result0 === null) {
-          if (input.substr(pos, 3).toLowerCase() === "who") {
-            result0 = input.substr(pos, 3);
-            pos += 3;
+          if (input.substr(pos, 4).toLowerCase() === "that") {
+            result0 = input.substr(pos, 4);
+            pos += 4;
           } else {
             result0 = null;
             if (reportFailures === 0) {
-              matchFailed("\"who\"");
+              matchFailed("\"that\"");
             }
           }
           if (result0 === null) {
-            if (input.substr(pos, 4).toLowerCase() === "that") {
-              result0 = input.substr(pos, 4);
-              pos += 4;
+            if (input.substr(pos, 3).toLowerCase() === "who") {
+              result0 = input.substr(pos, 3);
+              pos += 3;
             } else {
               result0 = null;
               if (reportFailures === 0) {
-                matchFailed("\"that\"");
+                matchFailed("\"who\"");
               }
             }
             if (result0 === null) {
@@ -966,6 +1150,16 @@ parser = (function(){
               }
             }
           }
+        }
+        return result0;
+      }
+      
+      function parse_rsvd() {
+        var result0;
+        
+        result0 = parse_prep();
+        if (result0 === null) {
+          result0 = parse_oper();
         }
         return result0;
       }
