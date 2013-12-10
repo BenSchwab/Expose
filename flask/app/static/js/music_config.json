@@ -1,10 +1,42 @@
 {
   "tables": [
     {
-      "mapsTo": ["Bars", "Bar","Pub", "Pubs"],
       "wordType": "noun",
+      "mapsTo": [
+        "users",
+        "user"
+      ],
       "expose": true,
-      "name": "Bar",
+      "name": "User",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "username"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "password"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "",
+          "name": "email"
+        }
+      ]
+    },
+    {
+      "wordType": "noun",
+      "mapsTo": [
+        "songs",
+        "song"
+      ],
+      "expose": true,
+      "name": "Song",
       "columns": [
         {
           "mapsTo": [],
@@ -16,35 +48,24 @@
           "mapsTo": [],
           "expose": true,
           "references": "",
-          "name": "address"
-        }
-      ]
-    },
-    {
-      "mapsTo": ["Beers","Beer","Brew","Brews"],
-      "wordType": "noun",
-      "expose": true,
-      "name": "Beer",
-      "columns": [
-        {
-          "mapsTo": ["called","name","named"],
-          "expose": true,
-          "references": "",
-          "name": "name"
+          "name": "artist"
         },
         {
           "mapsTo": [],
           "expose": true,
           "references": "",
-          "name": "brewer"
+          "name": "genre"
         }
       ]
     },
     {
-      "mapsTo": ["Drinkers","People","Person","Persons"],
       "wordType": "noun",
+      "mapsTo": [
+        "playlists",
+        "playlist"
+      ],
       "expose": true,
-      "name": "Drinker",
+      "name": "Playlist",
       "columns": [
         {
           "mapsTo": [],
@@ -55,80 +76,95 @@
         {
           "mapsTo": [],
           "expose": true,
-          "references": "",
-          "name": "address"
-        }
-      ]
-    },
-    {
-      "mapsTo": ["Frequents","Frequented","Frequent","Frequenter"],
-      "wordType": "verb",
-      "expose": true,
-      "name": "Frequents",
-      "columns": [
-        {
-          "mapsTo": [],
-          "expose": true,
-          "references": "Drinker.name",
-          "name": "drinker"
-        },
-        {
-          "mapsTo": [],
-          "expose": true,
-          "references": "Bar.name",
-          "name": "bar"
+          "references": "Song.name",
+          "name": "song"
         },
         {
           "mapsTo": [],
           "expose": true,
           "references": "",
-          "name": "times_a_week"
+          "name": "private"
         }
       ]
     },
     {
-      "mapsTo": ["Likes","Like","Liked"],
       "wordType": "verb",
+      "mapsTo": [
+        "listen",
+        "listens",
+        "listened",
+        "listening"
+      ],
       "expose": true,
-      "name": "Likes",
+      "name": "Listens",
       "columns": [
         {
           "mapsTo": [],
           "expose": true,
-          "references": "Drinker.name",
-          "name": "drinker"
+          "references": "User.username",
+          "name": "user"
         },
         {
           "mapsTo": [],
           "expose": true,
-          "references": "Beer.name",
-          "name": "beer"
-        }
-      ]
-    },
-    {
-      "mapsTo": ["Serves","Serve","Served"],
-      "wordType": "verb",
-      "expose": true,
-      "name": "Serves",
-      "columns": [
-        {
-          "mapsTo": [],
-          "expose": true,
-          "references": "Bar.name",
-          "name": "bar"
-        },
-        {
-          "mapsTo": [],
-          "expose": true,
-          "references": "Beer.name",
-          "name": "beer"
+          "references": "Song.name",
+          "name": "song"
         },
         {
           "mapsTo": [],
           "expose": true,
           "references": "",
-          "name": "price"
+          "name": "count"
+        }
+      ]
+    },
+    {
+      "wordType": "verb",
+      "mapsTo": [
+        "save",
+        "saves",
+        "saved",
+        "saving"
+      ],
+      "expose": true,
+      "name": "Saves",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "User.username",
+          "name": "user"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "Playlist.name",
+          "name": "playlist"
+        }
+      ]
+    },
+    {
+      "wordType": "verb",
+      "mapsTo": [
+        "follow",
+        "follows",
+        "followed",
+        "following"
+      ],
+      "expose": true,
+      "name": "Follows",
+      "columns": [
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "User.username",
+          "name": "user1"
+        },
+        {
+          "mapsTo": [],
+          "expose": true,
+          "references": "User.username",
+          "name": "user2"
         }
       ]
     }
